@@ -1,7 +1,11 @@
+import 'dart:ffi';
+import 'quiz_brain.dart';
 import 'package:flutter/material.dart';
 
+QuizBrain questions = QuizBrain();
+
 void main() {
-  runApp(const Quizzler());
+  runApp(Quizzler());
 }
 
 class Quizzler extends StatelessWidget {
@@ -14,7 +18,7 @@ class Quizzler extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.grey.shade900,
-        body: const SafeArea(
+        body: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10),
             child: QuizPage(),
@@ -33,6 +37,9 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  int questionNumber = 0;
+  List<Icon> scores = [];
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -45,7 +52,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'This is where the question text will go.',
+                questions.questionBank[questionNumber].questionText,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -64,7 +71,27 @@ class _QuizPageState extends State<QuizPage> {
                 backgroundColor: Colors.green,
               ),
               onPressed: () {
-                print("hello!");
+                setState(() {
+                  if (questions.questionBank[questionNumber].questionAnswer ==
+                      true) {
+                    scores.add(
+                      Icon(
+                        Icons.check,
+                        color: Colors.green,
+                      ),
+                    );
+                  } else {
+                    scores.add(
+                      Icon(
+                        Icons.cancel,
+                        color: Colors.red,
+                      ),
+                    );
+                  }
+                });
+                questionNumber++;
+                if (questionNumber >= questions.questionBank.length)
+                  questionNumber = 0;
               },
               child: Text(
                 'True',
@@ -85,7 +112,27 @@ class _QuizPageState extends State<QuizPage> {
                 backgroundColor: Colors.red,
               ),
               onPressed: () {
-                print("hell oh");
+                setState(() {
+                  if (questions.questionBank[questionNumber].questionAnswer ==
+                      false) {
+                    scores.add(
+                      Icon(
+                        Icons.check,
+                        color: Colors.green,
+                      ),
+                    );
+                  } else {
+                    scores.add(
+                      Icon(
+                        Icons.cancel,
+                        color: Colors.red,
+                      ),
+                    );
+                  }
+                });
+                questionNumber++;
+                if (questionNumber >= questions.questionBank.length)
+                  questionNumber = 0;
               },
               child: Text(
                 'False',
@@ -97,6 +144,16 @@ class _QuizPageState extends State<QuizPage> {
             ),
           ),
         ),
+        Row(
+          children: [
+            SizedBox(
+              height: 30.0,
+            )
+          ]..addAll(scores),
+        ),
+        SizedBox(
+          height: 20.0,
+        )
       ],
     );
   }
