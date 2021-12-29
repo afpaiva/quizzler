@@ -37,7 +37,6 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  int questionNumber = 0;
   List<Icon> scores = [];
 
   @override
@@ -52,7 +51,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questions.questionBank[questionNumber].questionText,
+                questions.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -72,8 +71,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  if (questions.questionBank[questionNumber].questionAnswer ==
-                      true) {
+                  if (questions.getQuestionAnswer() == true) {
                     scores.add(
                       Icon(
                         Icons.check,
@@ -89,9 +87,7 @@ class _QuizPageState extends State<QuizPage> {
                     );
                   }
                 });
-                questionNumber++;
-                if (questionNumber >= questions.questionBank.length)
-                  questionNumber = 0;
+                questions.nextQuestion();
               },
               child: Text(
                 'True',
@@ -113,8 +109,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  if (questions.questionBank[questionNumber].questionAnswer ==
-                      false) {
+                  if (questions.getQuestionAnswer() == false) {
                     scores.add(
                       Icon(
                         Icons.check,
@@ -130,9 +125,7 @@ class _QuizPageState extends State<QuizPage> {
                     );
                   }
                 });
-                questionNumber++;
-                if (questionNumber >= questions.questionBank.length)
-                  questionNumber = 0;
+                questions.nextQuestion();
               },
               child: Text(
                 'False',
