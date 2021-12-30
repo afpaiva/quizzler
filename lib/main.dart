@@ -1,6 +1,7 @@
 import 'dart:ffi';
 import 'quiz_brain.dart';
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 QuizBrain questions = QuizBrain();
 
@@ -37,7 +38,40 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  int points = 0;
   List<Icon> scores = [];
+  void checkAnswer(bool selectedAnswer) {
+    if (questions.getQuestionNumber() == 0) {
+      scores = [];
+    }
+    if (questions.getQuestionAnswer() == selectedAnswer) {
+      questions.addScore();
+      scores.add(
+        Icon(
+          Icons.check,
+          color: Colors.green,
+        ),
+      );
+    } else {
+      scores.add(
+        Icon(
+          Icons.cancel,
+          color: Colors.red,
+        ),
+      );
+    }
+    if (questions.getQuestionNumber() >=
+        questions.getQuestionBankLenght() - 1) {
+      points = questions.getScore();
+      Alert(
+        context: context,
+        title: "GAME OVER",
+        desc: "You get $points points!",
+      ).show();
+      questions.resetScore();
+      scores = [];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,21 +105,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  if (questions.getQuestionAnswer() == true) {
-                    scores.add(
-                      Icon(
-                        Icons.check,
-                        color: Colors.green,
-                      ),
-                    );
-                  } else {
-                    scores.add(
-                      Icon(
-                        Icons.cancel,
-                        color: Colors.red,
-                      ),
-                    );
-                  }
+                  checkAnswer(true);
                 });
                 questions.nextQuestion();
               },
@@ -109,21 +129,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  if (questions.getQuestionAnswer() == false) {
-                    scores.add(
-                      Icon(
-                        Icons.check,
-                        color: Colors.green,
-                      ),
-                    );
-                  } else {
-                    scores.add(
-                      Icon(
-                        Icons.cancel,
-                        color: Colors.red,
-                      ),
-                    );
-                  }
+                  checkAnswer(false);
                 });
                 questions.nextQuestion();
               },

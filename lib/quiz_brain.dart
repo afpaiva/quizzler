@@ -1,8 +1,9 @@
 // ignore_for_file: prefer_final_fields
-
+import 'package:flutter/cupertino.dart';
 import 'questions.dart';
 
 class QuizBrain {
+  int _score = 0;
   int _questionNumber = 0;
   List<Question> _questionBank = [
     Question('Some cats are actually allergic to humans', true),
@@ -37,6 +38,22 @@ class QuizBrain {
     if (_questionNumber >= _questionBank.length) {
       _questionNumber = 0;
     }
+  }
+
+  void addScore() {
+    _score++;
+  }
+
+  int getScore() {
+    return _score;
+  }
+
+  void resetScore() {
+    _score = 0;
+  }
+
+  int getQuestionNumber() {
+    return _questionNumber;
   }
 
   String getQuestionText() {
